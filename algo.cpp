@@ -505,6 +505,7 @@ for(i=0;i<carNum;i++)
 	lenNum=0;
 	k=carRun[i].a[0];
 	m=carRun[i].a[0];
+	car[i].carPlantime=1;//all first = 1;
 	nowRoadhavetime.insert({carRun[i].a[k],car[i].carPlantime});//dongtai
 	for(j=0;j<50;j++)
 	{
@@ -567,14 +568,37 @@ for(i=0;i<carNum;i++)
 			carRuninroad=totalLength[lenNum-1]+s2;
 		}
 	}
-
+	
+//car 1
         k=carRun[i].a[0];
-        while(k)
+	for(j=k;j>=1;j--)
+	{
+		if(ROAD[carRun[0].a[j]].roadTo==ROAD[carRun[0].a[j-1]].roadFrom||ROAD[carRun[0].a[j]].roadTo==car[0].carTo)
+		{
+			firstIterft=roadMapft.find(carRun[0].a[j]);
+			while(keyNumft){
+				if(firstIterft->second==carRuninroad.find(carRun[0].a[j])->second)
+				{
+					car[0].carPlantime=car[0].carPlantime+2;
+				}
+				++firstIterft;
+				--keyNumft;
+			}
+		}
+
+
+		else
+			cout<<2<<' ';
+	}
+
+
+/*        while(k)
         {
                 cout<<nowRoadhavetime.find(carRun[i].a[k])->second<<' ';
                 k--;
         }
         cout<<endl;
+*/
 
 
 	for(j=0;j<=carRun[i].a[0];j++)
