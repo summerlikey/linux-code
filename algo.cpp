@@ -500,7 +500,9 @@ int v1;
 int v2;
 int lenNum;
 int m;
+int n;
 int TIME;
+int t;//mark
 for(i=0;i<2;i++)
 {
 	for(j=0;j<50;j++)
@@ -575,7 +577,7 @@ for(i=0;i<2;i++)
 	}
 //car 1
         int isDuplex[50];
-	int t=0;//the mark
+	t=0;//the mark
 	for(j=0;j<50;j++)
 		isDuplex[j]=0;
 	for(j=k;j>=1;j--)
@@ -630,6 +632,18 @@ for(i=0;i<2;i++)
 		}
 	}
 	k=carRun[i].a[0];
+	m=0;
+	n=0;
+	for(j=k;j>=1;j--)
+	{
+		n=carRun[i].a[j];
+		m=nowRoadhavetime.find(n)->second;
+		if(isDuplex[j]==1)
+			roadMapft.insert({n,m});
+		else
+			roadMaptf.insert({n,m});
+	}
+	cout<<endl;
 	car[i].carPlantime=nowRoadhavetime.find(carRun[i].a[k])->second;
 	cout<<car[i].carPlantime<<endl;
 	for(j=0;j<=carRun[i].a[0];j++)
