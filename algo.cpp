@@ -444,11 +444,13 @@ for(i=0;i<carNum;i++)
 // the carPlantime
 // just kiding
 // //23333333
+/*
 for(i=0;i<carNum;i++)
 {
 	car[i].carPlantime=i+1;
 	car[i].carPlantime=car[i].carPlantime*5;
 }
+*/
 //kiding
 multimap<int,int>roadMapft;
 multimap<int,int>roadMaptf;
@@ -483,7 +485,6 @@ while(keyNumft){
 cout<<endl;
 //car 1
 map<int,int>nowRoadhavetime;
-nowRoadhavetime.insert({car[0].carId,car[0].carPlantime});//dongtai
 int totalLength[50];
 int k=0;
 int L=0;//the totalLength
@@ -498,38 +499,32 @@ int lenNum;
 int m;
 int TIME;
 j=0;
+lenNum=0;
 k=carRun[0].a[0];
-for(i=0;i<500;i++)
+m=carRun[0].a[0];
+nowRoadhavetime.insert({carRun[0].a[k],car[0].carPlantime});//dongtai
+for(j=0;j<50;j++)
 {
-	totalLength[i]=0;
+	totalLength[j]=0;
 }
-for(i=k;i>=1;i--)
+for(j=k;j>=1;j--)
 	{
-		j++;
-		L=L+ROAD[carRun[0].a[i]].roadLength;
-		totalLength[j]=L;
-		cout<<totalLength[j]<<' ';
+		lenNum++;
+		L=L+ROAD[carRun[0].a[j]].roadLength;
+		totalLength[lenNum]=L;
 	}
-cout<<endl;
 TIME=0;
-m=k;//dao xu
 j=0;
 lenNum=1;
 carRuninroad=0;
 allLength=totalLength[k];
+cout<<allLength<<endl;
+
 while(carRuninroad<=allLength)
 {
 	TIME++;
-
+	s2=0;
 	s1=totalLength[lenNum]-carRuninroad;
-	carRuninroad=carRuninroad+s1;
-	if(carRuninroad>allLength)
-		break;
-	if(carRuninroad==allLength)
-	{
-		TIME++;//jiedian shijian jincheku
-		break;
-	}
 	if(car[0].carHighspeed>ROAD[carRun[0].a[m-j]].roadHighspeed)
 	{
 		v1=ROAD[carRun[0].a[m-j]].roadHighspeed;
@@ -538,11 +533,21 @@ while(carRuninroad<=allLength)
 	{
 		v1=car[0].carHighspeed;
 	}
+	carRuninroad=carRuninroad+v1;
+	if(carRuninroad>allLength)
+                break;
+        if(carRuninroad==allLength)
+        {
+                TIME++;//jiedian shijian jincheku
+                break;
+        }
+
+	
 	if(carRuninroad>totalLength[lenNum])
 	{
 		j++;
 		lenNum++;
-		nowRoadhavetime.insert(carRun[0].a[m-j],TIME);
+		nowRoadhavetime.insert({carRun[0].a[m-j],TIME});
 		if(car[0].carHighspeed>ROAD[carRun[0].a[m-j]].roadHighspeed)
 			v2=ROAD[carRun[0].a[m-j]].roadHighspeed;
 		else
@@ -554,14 +559,14 @@ while(carRuninroad<=allLength)
 		else
 		{
 			s2=v2-s1;
-			if(s2<0)
+			if(s2<=0)
 				s2=0;
 		}
-		carRuninroad=totalLength[lenNum-1]+s2;
+          	carRuninroad=totalLength[lenNum-1]+s2;
 	}
 }
-
-
+cout<<nowRoadhavetime.find(5024)->second<<' '<<nowRoadhavetime.find(5025)->second<<endl;
+cout<<car[0].carPlantime<<endl;
 //233333
 //the carPlantime
 //guangdu sousou
