@@ -68,7 +68,7 @@ struct runNote runQue[100000];
 
 multimap<int,int>roadMapft;
 multimap<int,int>roadMaptf;
-
+multimap<int,int>runWithspeed;
 void runRun(int cFrom,int cTo)
 {
 	memset(runQue,0,sizeof(struct runNote)*100000);
@@ -641,12 +641,18 @@ for(i=0;i<roadNum;i++){
 }
 for(i=0;i<carNum;i++)
 {
-	tanxin(i);
+	runWithspeed.insert({car[i].carHighspeed,i});
 }
-
-
-
-
+for(i=10;i>=1;i--)
+{
+	auto runIter=runWithspeed.find(i);
+	auto runNumiter=runWithspeed.count(i);
+	while(runNumiter){
+		tanxin(runIter->second);
+		++runIter;
+		--runNumiter;
+	}
+}
 //233333
 //the carPlantime
 //guangdu sousou
