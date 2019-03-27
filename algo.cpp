@@ -503,7 +503,7 @@ int m;
 int n;
 int TIME;
 int t;//mark
-for(i=0;i<2;i++)
+for(i=0;i<carNum;i++)
 {
 	for(j=0;j<50;j++)
 		totalLength[j]=0;
@@ -586,21 +586,25 @@ for(i=0;i<2;i++)
 			isDuplex[j]=1;
 		else
 			isDuplex[j]=0;
-	}
 	
-	while(t=0)
+	}
+	t=0;	
+	while(t==0)
 	{
 		t=1;
-		k=carRun[i].a[i];
+		k=carRun[i].a[0];
 		for(j=k;j>=1;j--)
 		{
 			if(isDuplex[j]==1)
 			{
-				auto firstIterft=roadMapft.find(carRun[i].a[j]);
+				auto firstIterft=roadMapft.find(5000);
 				auto keyNumft=roadMapft.count(carRun[i].a[j]);
+			       	firstIterft=roadMapft.find(carRun[i].a[j]);
+			       	keyNumft=roadMapft.count(carRun[i].a[j]);
 				while(keyNumft){
 					if(firstIterft->second==nowRoadhavetime.find(carRun[i].a[j])->second)
 					{
+
 						t=0;
 						break;
 					}
@@ -610,8 +614,11 @@ for(i=0;i<2;i++)
 			}
 			else
 			{
-				auto firstItertf=roadMaptf.find(carRun[i].a[j]);
-				auto keyNumtf=roadMaptf.count(carRun[i].a[j]);
+				auto firstItertf=roadMaptf.find(5000);
+				auto keyNumtf=roadMaptf.count(5000);
+				firstItertf=roadMaptf.find(carRun[i].a[j]);
+                                keyNumtf=roadMaptf.count(carRun[i].a[j]);
+
 				while(keyNumtf){
 					if(firstItertf->second==nowRoadhavetime.find(carRun[i].a[j])->second)
 					{
@@ -622,13 +629,14 @@ for(i=0;i<2;i++)
 					--keyNumtf;
 				}
 			}
-		}
+		
 		if(t==0)
 		{
 			for(j=k;j>=1;j--)
 			{
 				++nowRoadhavetime.find(carRun[i].a[j])->second;
 			}
+		}
 		}
 	}
 	k=carRun[i].a[0];
@@ -643,9 +651,7 @@ for(i=0;i<2;i++)
 		else
 			roadMaptf.insert({n,m});
 	}
-	cout<<endl;
 	car[i].carPlantime=nowRoadhavetime.find(carRun[i].a[k])->second;
-	cout<<car[i].carPlantime<<endl;
 	for(j=0;j<=carRun[i].a[0];j++)
 	{
 		nowRoadhavetime.erase(carRun[i].a[j]);
