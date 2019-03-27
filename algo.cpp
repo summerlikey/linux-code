@@ -470,19 +470,17 @@ auto keyNumft=roadMapft.count(5059);
 auto firstItertf=roadMaptf.find(5000);
 auto keyNumtf=roadMaptf.find(5000);
 while(keyNumft){
-	cout<<firstIterft->second<<' ';
+//	cout<<firstIterft->second<<' ';
 	++firstIterft;
 	--keyNumft;
 }
-cout<<endl;
 firstIterft=roadMapft.find(5059);
 keyNumft=roadMapft.count(5059);
 while(keyNumft){
-	cout<<firstIterft->second<<' ';
+//	cout<<firstIterft->second<<' ';
 	++firstIterft;
 	--keyNumft;
 }
-cout<<endl;
 //car 1
 map<int,int>nowRoadhavetime;
 int totalLength[50];
@@ -498,80 +496,93 @@ int v2;
 int lenNum;
 int m;
 int TIME;
-j=0;
-lenNum=0;
-k=carRun[0].a[0];
-m=carRun[0].a[0];
-nowRoadhavetime.insert({carRun[0].a[k],car[0].carPlantime});//dongtai
-for(j=0;j<50;j++)
+for(i=0;i<carNum;i++)
 {
-	totalLength[j]=0;
-}
-for(j=k;j>=1;j--)
+	for(j=0;j<50;j++)
+		totalLength[j]=0;
+	j=0;
+	L=0;
+	lenNum=0;
+	k=carRun[i].a[0];
+	m=carRun[i].a[0];
+	nowRoadhavetime.insert({carRun[i].a[k],car[i].carPlantime});//dongtai
+	for(j=0;j<50;j++)
+	{
+		totalLength[j]=0;
+	}
+	for(j=k;j>=1;j--)
 	{
 		lenNum++;
-		L=L+ROAD[carRun[0].a[j]].roadLength;
+		L=L+ROAD[carRun[i].a[j]].roadLength;
 		totalLength[lenNum]=L;
 	}
-TIME=0;
-j=0;
-lenNum=1;
-carRuninroad=0;
-allLength=totalLength[k];
-cout<<allLength<<endl;
-
-while(carRuninroad<=allLength)
-{
-	TIME++;
+	TIME=0;
+	j=0;
+	s1=0;
+	v1=0;
+	v2=0;
 	s2=0;
-	s1=totalLength[lenNum]-carRuninroad;
-	if(car[0].carHighspeed>ROAD[carRun[0].a[m-j]].roadHighspeed)
+	lenNum=1;
+	carRuninroad=0;
+	allLength=totalLength[k];
+	while(carRuninroad<=allLength)
 	{
-		v1=ROAD[carRun[0].a[m-j]].roadHighspeed;
-	}
-	else
-	{
-		v1=car[0].carHighspeed;
-	}
-	carRuninroad=carRuninroad+v1;
-	if(carRuninroad>allLength)
-                break;
-        if(carRuninroad==allLength)
-        {
-                TIME++;//jiedian shijian jincheku
-                break;
-        }
-
-	
-	if(carRuninroad>totalLength[lenNum])
-	{
-		j++;
-		lenNum++;
-		nowRoadhavetime.insert({carRun[0].a[m-j],TIME});
-		if(car[0].carHighspeed>ROAD[carRun[0].a[m-j]].roadHighspeed)
-			v2=ROAD[carRun[0].a[m-j]].roadHighspeed;
-		else
-			v2=car[0].carHighspeed;
-
-		ss=carRuninroad-totalLength[lenNum-1];
-		if(s1>=v2)
-			s2=0;
+		TIME++;
+		s2=0;
+		s1=totalLength[lenNum]-carRuninroad;
+		if(car[i].carHighspeed>ROAD[carRun[i].a[m-j]].roadHighspeed)
+		{
+			v1=ROAD[carRun[i].a[m-j]].roadHighspeed;
+		}
 		else
 		{
-			s2=v2-s1;
-			if(s2<=0)
-				s2=0;
+			v1=car[i].carHighspeed;
 		}
-          	carRuninroad=totalLength[lenNum-1]+s2;
+		carRuninroad=carRuninroad+v1;
+		if(carRuninroad>allLength)
+			break;
+		if(carRuninroad==allLength)
+		{
+			TIME++;//jiedian shijian jincheku
+			break;
+		}
+		if(carRuninroad>totalLength[lenNum])
+		{
+			j++;
+			lenNum++;
+			nowRoadhavetime.insert({carRun[i].a[m-j],TIME});
+			if(car[i].carHighspeed>ROAD[carRun[i].a[m-j]].roadHighspeed)
+				v2=ROAD[carRun[i].a[m-j]].roadHighspeed;
+			else
+				v2=car[i].carHighspeed;
+			ss=carRuninroad-totalLength[lenNum-1];
+			if(s1>=v2)
+				s2=0;
+			else
+			{
+				s2=v2-s1;
+				if(s2<=0)
+					s2=0;
+			}
+			carRuninroad=totalLength[lenNum-1]+s2;
+		}
+	}
+
+        k=carRun[i].a[0];
+        while(k)
+        {
+                cout<<nowRoadhavetime.find(carRun[i].a[k])->second<<' ';
+                k--;
+        }
+        cout<<endl;
+
+
+	for(j=0;j<=carRun[i].a[0];j++)
+	{
+		nowRoadhavetime.erase(carRun[i].a[j]);
 	}
 }
-k=carRun[0].a[0];
-while(k)
-{
-	cout<<nowRoadhavetime.find(carRun[0].a[k])->second<<' ';
-	k--;
-}
-cout<<endl;
+
 //233333
 //the carPlantime
 //guangdu sousou
@@ -591,5 +602,6 @@ cout<<endl;
     carDatain.close();//close car.txt
     roadDatain.close();//close road.txt
     crossDatain.close();//close cross.txt
+    
     return 0;
-    }
+}
