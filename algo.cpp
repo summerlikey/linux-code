@@ -565,8 +565,13 @@ while(carRuninroad<=allLength)
           	carRuninroad=totalLength[lenNum-1]+s2;
 	}
 }
-cout<<nowRoadhavetime.find(5024)->second<<' '<<nowRoadhavetime.find(5025)->second<<endl;
-cout<<car[0].carPlantime<<endl;
+k=carRun[0].a[0];
+while(k)
+{
+	cout<<nowRoadhavetime.find(carRun[0].a[k])->second<<' ';
+	k--;
+}
+cout<<endl;
 //233333
 //the carPlantime
 //guangdu sousou
