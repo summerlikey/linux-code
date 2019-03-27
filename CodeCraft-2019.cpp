@@ -64,8 +64,10 @@ struct runNote{
 int head;
 int tail;
 int book[100000];
-
 struct runNote runQue[100000];
+
+multimap<int,int>roadMapft;
+multimap<int,int>roadMaptf;
 
 void runRun(int cFrom,int cTo)
 {
@@ -260,6 +262,180 @@ int t_1=0,t_2=0,t_3=0,t_4=0;
    return ;
 }
 
+void tanxin(int giveId){
+    map<int,int>nowRoadhavetime;
+    int totalLength[50];
+    int k=0;
+    int L=0;//the totalLength
+    int allLength;
+    int carRuninroad;
+    int s1;
+    int s2;
+    int ss;
+    int v1;
+    int v2;
+    int lenNum;
+    int m;
+    int n;
+    int TIME;
+    int t;//mark
+    int i;
+    int j;
+    i=giveId;
+	for(j=0;j<50;j++)
+		totalLength[j]=0;
+	j=0;
+	L=0;
+	lenNum=0;
+	k=carRun[i].a[0];
+	m=carRun[i].a[0];
+	car[i].carPlantime=1;//all first = 1;
+	nowRoadhavetime.insert({carRun[i].a[k],car[i].carPlantime});//dongtai
+	for(j=0;j<50;j++)
+	{
+		totalLength[j]=0;
+	}
+	for(j=k;j>=1;j--)
+	{
+		lenNum++;
+		L=L+ROAD[carRun[i].a[j]].roadLength;
+		totalLength[lenNum]=L;
+	}
+	TIME=0;
+	j=0;
+	s1=0;
+	v1=0;
+	v2=0;
+	s2=0;
+	lenNum=1;
+	carRuninroad=0;
+	allLength=totalLength[k];
+	while(carRuninroad<=allLength)
+	{
+		TIME++;
+		s2=0;
+		s1=totalLength[lenNum]-carRuninroad;
+		if(car[i].carHighspeed>ROAD[carRun[i].a[m-j]].roadHighspeed)
+		{
+			v1=ROAD[carRun[i].a[m-j]].roadHighspeed;
+		}
+		else
+		{
+			v1=car[i].carHighspeed;
+		}
+		carRuninroad=carRuninroad+v1;
+		if(carRuninroad>allLength)
+			break;
+		if(carRuninroad==allLength)
+		{
+			TIME++;//jiedian shijian jincheku
+			break;
+		}
+		if(carRuninroad>totalLength[lenNum])
+		{
+			j++;
+			lenNum++;
+			nowRoadhavetime.insert({carRun[i].a[m-j],TIME});
+			if(car[i].carHighspeed>ROAD[carRun[i].a[m-j]].roadHighspeed)
+				v2=ROAD[carRun[i].a[m-j]].roadHighspeed;
+			else
+				v2=car[i].carHighspeed;
+			ss=carRuninroad-totalLength[lenNum-1];
+			if(s1>=v2)
+				s2=0;
+			else
+			{
+				s2=v2-s1;
+				if(s2<=0)
+					s2=0;
+			}
+			carRuninroad=totalLength[lenNum-1]+s2;
+		}
+	}
+//car 1
+        int isDuplex[50];
+	t=0;//the mark
+	for(j=0;j<50;j++)
+		isDuplex[j]=0;
+	for(j=k;j>=1;j--)
+	{
+		if(ROAD[carRun[i].a[j]].roadTo==ROAD[carRun[i].a[j-1]].roadFrom||ROAD[carRun[i].a[j]].roadTo==car[i].carTo)
+			isDuplex[j]=1;
+		else
+			isDuplex[j]=0;
+	
+	}
+	t=0;	
+	while(t==0)
+	{
+		t=1;
+		k=carRun[i].a[0];
+		for(j=k;j>=1;j--)
+		{
+			if(isDuplex[j]==1)
+			{
+				auto firstIterft=roadMapft.find(5000);
+				auto keyNumft=roadMapft.count(carRun[i].a[j]);
+			       	firstIterft=roadMapft.find(carRun[i].a[j]);
+			       	keyNumft=roadMapft.count(carRun[i].a[j]);
+				while(keyNumft){
+					if(firstIterft->second==nowRoadhavetime.find(carRun[i].a[j])->second)
+					{
+
+						t=0;
+						break;
+					}
+					++firstIterft;
+					--keyNumft;
+				}
+			}
+			else
+			{
+				auto firstItertf=roadMaptf.find(5000);
+				auto keyNumtf=roadMaptf.count(5000);
+				firstItertf=roadMaptf.find(carRun[i].a[j]);
+                                keyNumtf=roadMaptf.count(carRun[i].a[j]);
+
+				while(keyNumtf){
+					if(firstItertf->second==nowRoadhavetime.find(carRun[i].a[j])->second)
+					{
+						t=0;
+						break;
+					}
+					++firstItertf;
+					--keyNumtf;
+				}
+			}
+		
+		if(t==0)
+		{
+			for(j=k;j>=1;j--)
+			{
+				++nowRoadhavetime.find(carRun[i].a[j])->second;
+			}
+		}
+		}
+	}
+	k=carRun[i].a[0];
+	m=0;
+	n=0;
+	for(j=k;j>=1;j--)
+	{
+		n=carRun[i].a[j];
+		m=nowRoadhavetime.find(n)->second;
+		if(isDuplex[j]==1)
+			roadMapft.insert({n,m});
+		else
+			roadMaptf.insert({n,m});
+	}
+	car[i].carPlantime=nowRoadhavetime.find(carRun[i].a[k])->second;
+	for(j=0;j<=carRun[i].a[0];j++)
+	{
+		nowRoadhavetime.erase(carRun[i].a[j]);
+	}
+return ;
+}
+
 
 int main(int argc,char *argv[])
 {
@@ -452,8 +628,6 @@ for(i=0;i<carNum;i++)
 }
 */
 //kiding
-multimap<int,int>roadMapft;
-multimap<int,int>roadMaptf;
 for(i=0;i<roadNum;i++){
 	if(road[i].roadIsduplex=1)
 	{
@@ -465,198 +639,13 @@ for(i=0;i<roadNum;i++){
 		roadMapft.insert({road[i].roadId,0});
 	}
 }
-/*
-auto firstIterft=roadMapft.find(5000);
-auto keyNumft=roadMapft.count(5000);
-auto firstItertf=roadMaptf.find(5000);
-auto keyNumtf=roadMaptf.find(5000);
-while(keyNumft){
-	++firstIterft->second;
-	++firstIterft->second;
-	cout<<firstIterft->second++<<' ';
-	++firstIterft;
-	--keyNumft;
-}
-firstIterft=roadMapft.find(5059);
-firstItertf=roadMapft.find(5059);
-keyNumft=roadMapft.count(5059);
-while(keyNumft){
-//	cout<<firstIterft->second<<' ';
-	++firstIterft;
-	--keyNumft;
-}
-*/
-//car 1
-map<int,int>nowRoadhavetime;
-int totalLength[50];
-int k=0;
-int L=0;//the totalLength
-int allLength;
-int carRuninroad;
-int s1;
-int s2;
-int ss;
-int v1;
-int v2;
-int lenNum;
-int m;
-int n;
-int TIME;
-int t;//mark
 for(i=0;i<carNum;i++)
 {
-	for(j=0;j<50;j++)
-		totalLength[j]=0;
-	j=0;
-	L=0;
-	lenNum=0;
-	k=carRun[i].a[0];
-	m=carRun[i].a[0];
-	car[i].carPlantime=1;//all first = 1;
-	nowRoadhavetime.insert({carRun[i].a[k],car[i].carPlantime});//dongtai
-	for(j=0;j<50;j++)
-	{
-		totalLength[j]=0;
-	}
-	for(j=k;j>=1;j--)
-	{
-		lenNum++;
-		L=L+ROAD[carRun[i].a[j]].roadLength;
-		totalLength[lenNum]=L;
-	}
-	TIME=0;
-	j=0;
-	s1=0;
-	v1=0;
-	v2=0;
-	s2=0;
-	lenNum=1;
-	carRuninroad=0;
-	allLength=totalLength[k];
-	while(carRuninroad<=allLength)
-	{
-		TIME++;
-		s2=0;
-		s1=totalLength[lenNum]-carRuninroad;
-		if(car[i].carHighspeed>ROAD[carRun[i].a[m-j]].roadHighspeed)
-		{
-			v1=ROAD[carRun[i].a[m-j]].roadHighspeed;
-		}
-		else
-		{
-			v1=car[i].carHighspeed;
-		}
-		carRuninroad=carRuninroad+v1;
-		if(carRuninroad>allLength)
-			break;
-		if(carRuninroad==allLength)
-		{
-			TIME++;//jiedian shijian jincheku
-			break;
-		}
-		if(carRuninroad>totalLength[lenNum])
-		{
-			j++;
-			lenNum++;
-			nowRoadhavetime.insert({carRun[i].a[m-j],TIME});
-			if(car[i].carHighspeed>ROAD[carRun[i].a[m-j]].roadHighspeed)
-				v2=ROAD[carRun[i].a[m-j]].roadHighspeed;
-			else
-				v2=car[i].carHighspeed;
-			ss=carRuninroad-totalLength[lenNum-1];
-			if(s1>=v2)
-				s2=0;
-			else
-			{
-				s2=v2-s1;
-				if(s2<=0)
-					s2=0;
-			}
-			carRuninroad=totalLength[lenNum-1]+s2;
-		}
-	}
-//car 1
-        int isDuplex[50];
-	t=0;//the mark
-	for(j=0;j<50;j++)
-		isDuplex[j]=0;
-	for(j=k;j>=1;j--)
-	{
-		if(ROAD[carRun[i].a[j]].roadTo==ROAD[carRun[i].a[j-1]].roadFrom||ROAD[carRun[i].a[j]].roadTo==car[i].carTo)
-			isDuplex[j]=1;
-		else
-			isDuplex[j]=0;
-	
-	}
-	t=0;	
-	while(t==0)
-	{
-		t=1;
-		k=carRun[i].a[0];
-		for(j=k;j>=1;j--)
-		{
-			if(isDuplex[j]==1)
-			{
-				auto firstIterft=roadMapft.find(5000);
-				auto keyNumft=roadMapft.count(carRun[i].a[j]);
-			       	firstIterft=roadMapft.find(carRun[i].a[j]);
-			       	keyNumft=roadMapft.count(carRun[i].a[j]);
-				while(keyNumft){
-					if(firstIterft->second==nowRoadhavetime.find(carRun[i].a[j])->second)
-					{
-
-						t=0;
-						break;
-					}
-					++firstIterft;
-					--keyNumft;
-				}
-			}
-			else
-			{
-				auto firstItertf=roadMaptf.find(5000);
-				auto keyNumtf=roadMaptf.count(5000);
-				firstItertf=roadMaptf.find(carRun[i].a[j]);
-                                keyNumtf=roadMaptf.count(carRun[i].a[j]);
-
-				while(keyNumtf){
-					if(firstItertf->second==nowRoadhavetime.find(carRun[i].a[j])->second)
-					{
-						t=0;
-						break;
-					}
-					++firstItertf;
-					--keyNumtf;
-				}
-			}
-		
-		if(t==0)
-		{
-			for(j=k;j>=1;j--)
-			{
-				++nowRoadhavetime.find(carRun[i].a[j])->second;
-			}
-		}
-		}
-	}
-	k=carRun[i].a[0];
-	m=0;
-	n=0;
-	for(j=k;j>=1;j--)
-	{
-		n=carRun[i].a[j];
-		m=nowRoadhavetime.find(n)->second;
-		if(isDuplex[j]==1)
-			roadMapft.insert({n,m});
-		else
-			roadMaptf.insert({n,m});
-	}
-	car[i].carPlantime=nowRoadhavetime.find(carRun[i].a[k])->second;
-	for(j=0;j<=carRun[i].a[0];j++)
-	{
-		nowRoadhavetime.erase(carRun[i].a[j]);
-	}
+	tanxin(i);
 }
+
+
+
 
 //233333
 //the carPlantime
