@@ -465,22 +465,27 @@ for(i=0;i<roadNum;i++){
 		roadMapft.insert({road[i].roadId,0});
 	}
 }
-auto firstIterft=roadMapft.find(5059);
-auto keyNumft=roadMapft.count(5059);
+/*
+auto firstIterft=roadMapft.find(5000);
+auto keyNumft=roadMapft.count(5000);
 auto firstItertf=roadMaptf.find(5000);
 auto keyNumtf=roadMaptf.find(5000);
 while(keyNumft){
-//	cout<<firstIterft->second<<' ';
+	++firstIterft->second;
+	++firstIterft->second;
+	cout<<firstIterft->second++<<' ';
 	++firstIterft;
 	--keyNumft;
 }
 firstIterft=roadMapft.find(5059);
+firstItertf=roadMapft.find(5059);
 keyNumft=roadMapft.count(5059);
 while(keyNumft){
 //	cout<<firstIterft->second<<' ';
 	++firstIterft;
 	--keyNumft;
 }
+*/
 //car 1
 map<int,int>nowRoadhavetime;
 int totalLength[50];
@@ -496,7 +501,7 @@ int v2;
 int lenNum;
 int m;
 int TIME;
-for(i=0;i<carNum;i++)
+for(i=0;i<2;i++)
 {
 	for(j=0;j<50;j++)
 		totalLength[j]=0;
@@ -568,39 +573,65 @@ for(i=0;i<carNum;i++)
 			carRuninroad=totalLength[lenNum-1]+s2;
 		}
 	}
-	
 //car 1
-        k=carRun[i].a[0];
+        int isDuplex[50];
+	int t=0;//the mark
+	for(j=0;j<50;j++)
+		isDuplex[j]=0;
 	for(j=k;j>=1;j--)
 	{
-		if(ROAD[carRun[0].a[j]].roadTo==ROAD[carRun[0].a[j-1]].roadFrom||ROAD[carRun[0].a[j]].roadTo==car[0].carTo)
+		if(ROAD[carRun[i].a[j]].roadTo==ROAD[carRun[i].a[j-1]].roadFrom||ROAD[carRun[i].a[j]].roadTo==car[i].carTo)
+			isDuplex[j]=1;
+		else
+			isDuplex[j]=0;
+	}
+	
+	while(t=0)
+	{
+		t=1;
+		k=carRun[i].a[i];
+		for(j=k;j>=1;j--)
 		{
-			firstIterft=roadMapft.find(carRun[0].a[j]);
-			while(keyNumft){
-				if(firstIterft->second==carRuninroad.find(carRun[0].a[j])->second)
-				{
-					car[0].carPlantime=car[0].carPlantime+2;
+			if(isDuplex[j]==1)
+			{
+				auto firstIterft=roadMapft.find(carRun[i].a[j]);
+				auto keyNumft=roadMapft.count(carRun[i].a[j]);
+				while(keyNumft){
+					if(firstIterft->second==nowRoadhavetime.find(carRun[i].a[j])->second)
+					{
+						t=0;
+						break;
+					}
+					++firstIterft;
+					--keyNumft;
 				}
-				++firstIterft;
-				--keyNumft;
+			}
+			else
+			{
+				auto firstItertf=roadMaptf.find(carRun[i].a[j]);
+				auto keyNumtf=roadMaptf.count(carRun[i].a[j]);
+				while(keyNumtf){
+					if(firstItertf->second==nowRoadhavetime.find(carRun[i].a[j])->second)
+					{
+						t=0;
+						break;
+					}
+					++firstItertf;
+					--keyNumtf;
+				}
 			}
 		}
-
-
-		else
-			cout<<2<<' ';
+		if(t==0)
+		{
+			for(j=k;j>=1;j--)
+			{
+				++nowRoadhavetime.find(carRun[i].a[j])->second;
+			}
+		}
 	}
-
-
-/*        while(k)
-        {
-                cout<<nowRoadhavetime.find(carRun[i].a[k])->second<<' ';
-                k--;
-        }
-        cout<<endl;
-*/
-
-
+	k=carRun[i].a[0];
+	car[i].carPlantime=nowRoadhavetime.find(carRun[i].a[k])->second;
+	cout<<car[i].carPlantime<<endl;
 	for(j=0;j<=carRun[i].a[0];j++)
 	{
 		nowRoadhavetime.erase(carRun[i].a[j]);
