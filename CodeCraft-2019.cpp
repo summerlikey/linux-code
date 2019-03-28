@@ -262,7 +262,7 @@ int t_1=0,t_2=0,t_3=0,t_4=0;
    return ;
 }
 
-void tanxin(int giveId){
+void tanxin(int giveId,int runStarttime){
     map<int,int>nowRoadhavetime;
     int totalLength[50];
     int k=0;
@@ -271,7 +271,6 @@ void tanxin(int giveId){
     int carRuninroad;
     int s1;
     int s2;
-    int ss;
     int v1;
     int v2;
     int lenNum;
@@ -290,7 +289,7 @@ void tanxin(int giveId){
 	k=carRun[i].a[0];
 	m=carRun[i].a[0];
 	car[i].carPlantime=1;//all first = 1;
-	nowRoadhavetime.insert({carRun[i].a[k],car[i].carPlantime});//dongtai
+	nowRoadhavetime.insert({carRun[i].a[k],runStarttime});//dongtai
 	for(j=0;j<50;j++)
 	{
 		totalLength[j]=0;
@@ -301,7 +300,7 @@ void tanxin(int giveId){
 		L=L+ROAD[carRun[i].a[j]].roadLength;
 		totalLength[lenNum]=L;
 	}
-	TIME=0;
+	TIME=runStarttime;
 	j=0;
 	s1=0;
 	v1=0;
@@ -340,7 +339,6 @@ void tanxin(int giveId){
 				v2=ROAD[carRun[i].a[m-j]].roadHighspeed;
 			else
 				v2=car[i].carHighspeed;
-			ss=carRuninroad-totalLength[lenNum-1];
 			if(s1>=v2)
 				s2=0;
 			else
@@ -628,6 +626,8 @@ for(i=0;i<carNum;i++)
 }
 */
 //kiding
+//my algo
+
 for(i=0;i<roadNum;i++){
 	if(road[i].roadIsduplex=1)
 	{
@@ -643,12 +643,24 @@ for(i=0;i<carNum;i++)
 {
 	runWithspeed.insert({car[i].carHighspeed,i});
 }
-for(i=10;i>=1;i--)
+int k;
+int startTime;
+startTime=0;
+for(i=8;i>=2;i=i-2)
 {
+	if(i==8)
+		startTime=0;
+	if(i==6)
+		startTime=50;
+	if(i==4)
+		startTime=100;
+	else
+		startTime=150;
 	auto runIter=runWithspeed.find(i);
 	auto runNumiter=runWithspeed.count(i);
 	while(runNumiter){
-		tanxin(runIter->second);
+		tanxin(runIter->second,car[runIter->second].carPlantime);
+		cout<<car[runIter->second].carPlantime<<' ';
 		++runIter;
 		--runNumiter;
 	}
@@ -657,6 +669,7 @@ for(i=10;i>=1;i--)
 //the carPlantime
 //guangdu sousou
 //the answer
+
     for(i=0;i<carNum;i++)
     {
 	    answerOut<<'('<<car[i].carId<<','<<car[i].carPlantime;
