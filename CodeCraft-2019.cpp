@@ -646,20 +646,20 @@ for(i=0;i<carNum;i++)
 int k;
 int startTime;
 startTime=0;
-for(i=8;i>=2;i=i-2)
+for(i=2;i<=8;i=i+2)
 {
 	if(i==8)
-		startTime=0;
-	if(i==6)
-		startTime=50;
-	if(i==4)
-		startTime=100;
-	else
 		startTime=150;
+	if(i==6)
+		startTime=100;
+	if(i==4)
+		startTime=50;
+	else
+		startTime=0;
 	auto runIter=runWithspeed.find(i);
 	auto runNumiter=runWithspeed.count(i);
 	while(runNumiter){
-		tanxin(runIter->second,car[runIter->second].carPlantime);
+		tanxin(runIter->second,car[runIter->second].carPlantime+startTime);
 		cout<<car[runIter->second].carPlantime<<' ';
 		++runIter;
 		--runNumiter;
