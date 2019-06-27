@@ -6,9 +6,9 @@ touch a.cpp 不加路径则在当前路径创建文件
 cat -n a.cpp 行号显示，这命令只显示最后一页内容
 tac -n a.cpp 倒着查看，相当于第一页内容
 # cp
-cp file1 file2 复制file1文件并命名为file2  
-cp -r 复制目录 
-cp -p 保持文件的属性，例如时间不变  
+cp file1 file2 复制file1文件并命名为file2   
+cp -r 复制目录  
+cp -p 保持文件的属性，例如时间不变   
 
 
 # more 分页显示内容
