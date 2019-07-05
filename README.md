@@ -20,3 +20,6 @@ cp -p 保持文件的属性，例如时间不变
 head -n 2 a.cpp  制定前两行 默认前10行
 # tail 查看后几行
 tail -n 3 a.cpp  查看后3行 默认后十行，可以用来查看日志，最后几行
+
+#while(cin>>word) 使用ctrl + D退出循环
+
